@@ -1,4 +1,5 @@
 import React from "react";
+import Cards from './Cards';
 
 const Start = ( {onStartGame} ) =>{
     return (
