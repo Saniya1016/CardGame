@@ -1,0 +1,32 @@
+.landing-page {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .header {
+    background-color: #ff0000;
+    padding: 20px;
+    color: #fff;
+  }
+  
+  .main {
+    padding: 100px 0;
+  }
+  
+  button {
+    font-size: 18px;
+    padding: 12px 24px;
+    background-color: #39a728;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #218838;
+  }
+  
+  .footer {
+    background-color: #f8f9fa;
+    padding: 10px;
+  }
