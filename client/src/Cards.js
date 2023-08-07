@@ -1,5 +1,5 @@
 
-export default class Cards{
+class Cards{
     constructor(){
         this.cards = [];
         this.current_card = {};
@@ -15,6 +15,14 @@ export default class Cards{
         return [...this.cards]; //shallow copy of array
     }
 
+    get_current_card = () => {
+        return this.current_card;
+    }
+
+    get_previous_card = () => {
+        return this.previous_card;
+    }
+
     shuffle = () => {
         const n = this.cards.length;
         for (let i = n - 1; i >= 1; i--) {
@@ -25,7 +33,7 @@ export default class Cards{
     }
 
     choose_high_low = (choice) => {
-        this.high = (choice == "high")? true : false;
+        this.high = (choice === "high")? true : false;
     }
 
     draw_from_pile_is_success = () => {
@@ -42,6 +50,10 @@ export default class Cards{
     }
 
 };
+
+let d = new Cards();
+d.shuffle();
+export default d;
 
 // ----------- TESTS ------------ //
 

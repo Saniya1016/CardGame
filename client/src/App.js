@@ -1,13 +1,18 @@
 import './App.css';
 import {handleStartGame, Landing} from './Landing';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Start from './Start';
 
 //Control react components
 function App() {
 
   //gameStart is initialised to false initially
-  const [gameStarted, setGameStarted] = useState(false);
+  const initialGameState = localStorage.getItem('gameStarted') === 'true';
+  const [gameStarted, setGameStarted] = useState(initialGameState);
+
+  useEffect(() =>{
+    localStorage.setItem('gameStarted', gameStarted);
+  }, [gameStarted]);
 
   //callback function for when the 'start game' button on Landing page is pressed
   const handleStartGame = () => {
