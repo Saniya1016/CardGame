@@ -1,25 +1,13 @@
 import React, {useState, useEffect} from "react";
-import Cards from './Cards';
+import d from './Cards';
 
 
 const Start = () =>{
-    let d = new Cards();
-
-    console.log(d.get_cards_in_pile().length);
     
-    const [deck, setDeck] = useState([]);
-    const [current_card, setCurrentCard] = useState({});
-    const [previous_card, setPreviousCard] = useState({});
+    const [deck, setDeck] = useState(d.get_cards_in_pile());
+    const [current_card, setCurrentCard] = useState(d.get_current_card());
+    const [previous_card, setPreviousCard] = useState(d.get_previous_card());
     const [score, setScore] = useState(0);
-    console.log("Current card 1: ", current_card);
-    console.log("deck 1: " , deck);
-
-    useEffect(() => {
-        d.shuffle();
-        setDeck(d.get_cards_in_pile());
-        setCurrentCard(d.get_current_card());
-        setPreviousCard(d.get_previous_card());
-    }, []);
 
 
     useEffect(() => {
