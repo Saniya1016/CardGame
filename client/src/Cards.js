@@ -6,9 +6,13 @@ class Cards{
         this.previous_card = {};
         this.high = false;
         for(let i=0;i<13;++i){
-            let card = {'number': i+1, 'suit': "Diamond"};
+            let card = {'number': i+1, 'suit': "Diamonds"};
             this.cards.push(card);
-        }    
+        }
+        for(let i=0;i<13;++i){
+            let card = {'number': i+1, 'suit': "Spades"};
+            this.cards.push(card);
+        }   
     }
 
     get_cards_in_pile = () =>{
@@ -42,7 +46,7 @@ class Cards{
             this.previous_card = this.current_card;
             this.current_card = this.cards.pop();
             // console.log(this.previous_card.number, this.current_card.number);
-            return ((this.high && this.current_card.number > this.previous_card.number) || (!this.high && this.current_card.number < this.previous_card.number));
+            return ((this.high && this.current_card.number >= this.previous_card.number) || (!this.high && this.current_card.number <= this.previous_card.number));
         }
         console.log("Game Over");
         return false;
