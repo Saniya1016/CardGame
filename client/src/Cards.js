@@ -15,6 +15,22 @@ class Cards{
         }   
     }
 
+    reset_state = () => {
+        this.cards = [];
+        this.current_card = {};
+        this.previous_card = {};
+        this.high = false;
+        for(let i=0;i<13;++i){
+            let card = {'number': i+1, 'suit': "Diamonds"};
+            this.cards.push(card);
+        }
+        for(let i=0;i<13;++i){
+            let card = {'number': i+1, 'suit': "Spades"};
+            this.cards.push(card);
+        }
+        this.shuffle(); 
+    }
+
     get_cards_in_pile = () =>{
         return [...this.cards]; //shallow copy of array
     }

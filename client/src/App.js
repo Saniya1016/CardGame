@@ -1,5 +1,5 @@
 import './App.css';
-import {handleStartGame, Landing} from './Landing';
+import {Landing} from './Landing';
 import React, {useState, useEffect} from 'react';
 import Start from './Start';
 
