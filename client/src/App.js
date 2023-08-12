@@ -1,34 +1,28 @@
 import './App.css';
-import {Landing} from './Landing';
-import React, {useState, useEffect} from 'react';
+import { Landing } from './Landing';
+import React, { useState } from 'react';
 import Start from './Start';
 
-//Control react components
+// Control react components
 function App() {
+  // gameStart is initialised to false initially
+  const [gameStarted, setGameStarted] = useState(false);
 
-  //gameStart is initialised to false initially
-  const initialGameState = localStorage.getItem('gameStarted') === 'true';
-  const [gameStarted, setGameStarted] = useState(initialGameState);
-
-  useEffect(() =>{
-    localStorage.setItem('gameStarted', gameStarted);
-  }, [gameStarted]);
-
-  //callback function for when the 'start game' button on Landing page is pressed
+  // callback function for when the 'start game' button on Landing page is pressed
   const handleStartGame = () => {
     console.log('Game Started!!');
-    //set gameStarted state to true
+    // set gameStarted state to true
     setGameStarted(true);
   }
 
-  //if the gameStarted state is true render the Start page else render landing page
+  // if the gameStarted state is true render the Start page else render landing page
   return (
     <div className="App">
       {
-        gameStarted? (
-          <Start/>
+        gameStarted ? (
+          <Start />
         ) : (
-          <Landing onStartGame={handleStartGame}/>
+          <Landing onStartGame={handleStartGame} />
         )
       }
     </div>

@@ -23,9 +23,7 @@ const Start = () =>{
         localStorage.setItem("allPrevious", JSON.stringify(allPrevious));
         localStorage.setItem("showAllPrevious", JSON.stringify(showAllPrevious));
         localStorage.setItem("score", score);
-        localStorage.setItem("flag", flag);;
-
-        console.log("ls: " , localStorage.getItem("deck"));
+        localStorage.setItem("flag", flag);
 
     }, [current_card, deck, allPrevious, showAllPrevious, previous_card, score, flag]);
 
