@@ -24,6 +24,16 @@ app.get("/getUser", async (req, res) => {
     res.end();
 });
 
+//read all users from database
+app.get("/getAllUsers", async(req, res) => {
+    if(req.body !== undefined){
+        const users = await score_data.readAllUsers();
+        res.status(200).json(users);
+    } else{
+        res.status(400).send('Bad Request');
+    }
+});
+
 //create a new user of given id
 app.post("/saveUser", async(req, res) => {
     console.log("body: " , req.body);
@@ -44,6 +54,15 @@ app.put("/updateScore", async(req, res) => {
         res.status(200).send('OK');
     } else{
         res.status(400).json({'error': 'missing parameters'});
+    }
+});
+
+app.delete("/deleteUser", async(req, res) => {
+    if(req.body !== undefined && req.body.id !== undefined){
+        let response = await score_data.deleteUser(req.body.id);
+        res.status(200).json(response);
+    } else {
+        res.status(400).send('Bad Request');
     }
 });
 
