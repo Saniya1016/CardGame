@@ -57,6 +57,7 @@ app.put("/updateScore", async(req, res) => {
     }
 });
 
+//delete user with given id
 app.delete("/deleteUser", async(req, res) => {
     if(req.body !== undefined && req.body.id !== undefined){
         let response = await score_data.deleteUser(req.body.id);
