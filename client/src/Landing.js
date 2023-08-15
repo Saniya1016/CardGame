@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import './Landing.css';
+import * as crud from './crud.js'
 
 //Landing page to start the game
 export const Landing = ({onStartGame}) => {
@@ -8,7 +9,7 @@ export const Landing = ({onStartGame}) => {
 
     const handleNameChange = (event) => {
         setName(event.target.value);
-      }
+    }
 
     return (
         <div className="landing-page">
@@ -18,7 +19,7 @@ export const Landing = ({onStartGame}) => {
             <div>
                 <input
                     type="text"
-                    placeholder="Enter your name"
+                    placeholder="Enter your username"
                     value={name}
                     onChange={handleNameChange}
                 />
