@@ -21,6 +21,7 @@ export const Landing = () => {
     const handleStartGame = () => {
         console.log('Game Started!!');
         // set gameStarted state to true
+        crud.createUser(name);
         history.push('/start');
       }
 

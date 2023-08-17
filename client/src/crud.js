@@ -1,7 +1,7 @@
 // ======= USER CRUD ================== //
 
 export async function createUser(id){
-    const response = await fetch(`/saveUser`, {
+    const response = await fetch(`http://localhost:8080/saveUser`, {
         method: 'POST',
         headers:{
             "Content-Type":'application/json',

@@ -7,12 +7,6 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 // Control react components
 function App() {
 
-  // callback function for when the 'start game' button on Landing page is pressed
-  const handleStartGame = () => {
-    console.log('Game Started!!');
-    // set gameStarted state to true
-  }
-
   // if the gameStarted state is true render the Start page else render landing page
   return (
     <Router>
