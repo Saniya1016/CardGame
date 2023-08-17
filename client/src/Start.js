@@ -1,10 +1,14 @@
 import React, {useState, useEffect} from "react";
 import d from './Cards';
 import Card from './Card';
+import * as crud from './crud.js';
+
+
 
 
 const Start = () =>{
-    
+
+    const user_id = localStorage.getItem("username");
     //useState re-renders on refreshing page/ mounting and unmounting page
     const [deck, setDeck] = useState(JSON.parse(localStorage.getItem("deck")) || d.get_cards_in_pile());
     const [current_card, setCurrentCard] = useState(JSON.parse(localStorage.getItem("current_card")) || d.get_current_card());
@@ -13,6 +17,18 @@ const Start = () =>{
     const [showAllPrevious, setShowAllPrevious] = useState(JSON.parse(localStorage.getItem("showAllPrevious"))||false);
     const [flag, setFlag] = useState(localStorage.getItem("flag") || "Show");
     const [score, setScore] = useState(JSON.parse(localStorage.getItem("score"))|| 0);
+
+
+    useEffect(() => {
+        // Fetch user data and update the component state
+        const fetchUserData = async () => {
+            const user = await crud.readUser(user_id);
+            console.log("hiii", user); 
+        };
+    
+        // Call the function to fetch user data when the component mounts
+        fetchUserData();
+      }, [user_id]);
 
 
     //set item in local storage whenever state changes

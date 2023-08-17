@@ -13,20 +13,18 @@ export async function createUser(id){
 }
 
 export async function readUser(id){
-    try {
-        const response = await fetch(`/getUser?=${id}`, {
-            method: 'GET',
-        });
-        const data = await response.json();
-        return data; 
-    } catch (error) {
-        console.error(error);
-    }
-
+    const response = await fetch(`http://localhost:8080/getUser?id=${id}`, {
+        method: 'GET',
+    });
+    console.log("wtf", response);
+    if(!response) {throw new Error('Error');}
+    const data = await response.json();
+    console.log("data = ", data);
+    return data; 
 }
 
 export async function updateScore(id, score){
-    const response = await fetch(`/updateScore`, {
+    const response = await fetch(`http://localhost:8080/updateScore`, {
         method: 'PUT',
         headers: {"Content-Type":'application/json',},
         body: JSON.stringify({id: id, score : score}),
@@ -36,7 +34,7 @@ export async function updateScore(id, score){
 }
 
 export async function deleteUser(id){
-    const response = await fetch(`/deleteUser`, {
+    const response = await fetch(`http://localhost:8080/deleteUser`, {
         method: 'DELETE',
         headers: {"Content-Type":'application/json',},
         body: JSON.stringify({id: id }),

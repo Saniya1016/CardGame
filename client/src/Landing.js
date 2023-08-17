@@ -18,10 +18,10 @@ export const Landing = () => {
         console.log(localStorage.getItem("username"));
     }, [name]);
 
-    const handleStartGame = () => {
+    const handleStartGame = async () => {
         console.log('Game Started!!');
         // set gameStarted state to true
-        crud.createUser(name);
+        await crud.createUser(name);
         history.push('/start');
       }
 
