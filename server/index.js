@@ -1,5 +1,6 @@
 import express from "express";
 import * as score_data from './score_crud.js';
+import cors from 'cors';
 
 // init app
 const port = process.env.PORT || 8080;
@@ -7,6 +8,7 @@ const app = express();
 
 //middleware so express can read post requests with body of json format
 app.use(express.json());
+app.use(cors());
 
 //test if port is connected to app
 app.get("/", async (req, res) => {
