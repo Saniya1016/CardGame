@@ -1,15 +1,28 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
+import {useHistory} from 'react-router-dom';
 import './Landing.css';
 import * as crud from './crud.js'
 
 //Landing page to start the game
-export const Landing = ({onStartGame}) => {
+export const Landing = () => {
 
-    const [name, setName] = useState('');
+    const history = useHistory();
+    const [name, setName] = useState(localStorage.getItem("username") || '');
 
     const handleNameChange = (event) => {
         setName(event.target.value);
     }
+
+    useEffect(() => {
+        localStorage.setItem("username", name);
+        console.log(localStorage.getItem("username"));
+    }, [name]);
+
+    const handleStartGame = () => {
+        console.log('Game Started!!');
+        // set gameStarted state to true
+        history.push('/start');
+      }
 
     return (
         <div className="landing-page">
@@ -25,7 +38,7 @@ export const Landing = ({onStartGame}) => {
                 />
             </div>
             <main className="main">
-                <button onClick={onStartGame}>Start Game</button>
+                <button onClick={handleStartGame}>Start Game</button>
             </main>
         </div>
     );
