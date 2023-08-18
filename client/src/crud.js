@@ -26,7 +26,9 @@ export async function readUser(id){
 export async function updateScore(id, score){
     const response = await fetch(`http://localhost:8080/updateScore`, {
         method: 'PUT',
-        headers: {"Content-Type":'application/json',},
+        headers: {
+            "Content-Type":'application/json',
+        },
         body: JSON.stringify({id: id, score : score}),
     });
     console.log("res: ", response);
