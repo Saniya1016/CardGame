@@ -39,25 +39,28 @@ const Start = () => {
 
 
     //update the users score in the database only once when the game is over
-    useEffect(()  => {
-        //store in db
-        const setScore = async () =>{
-            console.log("weird: ", deck.length ===0, gameOver, user, store);
-            if(deck.length === 0 && gameOver && user && user.score && !store){
+    //store in db
+    // Update the users score in the database only once when the game is over
+    useEffect(() => {
+        const setScoreInDB = async () => {
+            console.log(gameOver, user, !store);
+            if (gameOver && user && user.score && !store) {
                 user.score[0] = Math.max(user.score[0], score);
                 const response = await crud.updateScore(user._id, user.score);
                 setStore(true);
-                localStorage.setItem("store", JSON.stringify(true))
-                console.log("idkkk: ", response);
+                localStorage.setItem("store", JSON.stringify(true));
+                console.log("stored now: ", response);
+            } else{
+                console.log("no store");
             }
-        }
-        setScore();
-
-    }, [deck.length, score, user, gameOver, store]);
-
-
+        };
+        // Call setScoreInDB function when the game is over and deck length is 0
+        setScoreInDB();
+    }, [gameOver, user, store, score]);
+        
     //set item in local storage whenever state changes - this way we dont have to keep setting localStorage everytime we make a change
     useEffect(() => {
+        console.log("started ls");
         localStorage.setItem("deck", JSON.stringify(deck) );
         localStorage.setItem("current_card", JSON.stringify(current_card));
         localStorage.setItem("previous_card", JSON.stringify(previous_card));
@@ -65,7 +68,8 @@ const Start = () => {
         localStorage.setItem("showAllPrevious", JSON.stringify(showAllPrevious));
         localStorage.setItem("score", score);
         localStorage.setItem("flag", flag);
-        localStorage.setItem("gameOver", JSON.stringify(deck.length === 0));
+        localStorage.setItem("gameOver", JSON.stringify(gameOver));
+        console.log("ended ls");
 
     }, [current_card, deck, allPrevious, showAllPrevious, previous_card, score, flag, gameOver]);
 
@@ -74,17 +78,19 @@ const Start = () => {
         //if game is not over
         if(!gameOver){
             //set the users choice and determine wheteher it is a success
+            console.log("started handle guess");
             d.choose_high_low(guess);
             if(d.draw_from_pile_is_success()){
                 setScore(score+1); //+1 for success
             } else{
                 setScore(score-1); //-1 for failure
             }
-            setDeck(d.get_cards_in_pile());
-            setCurrentCard(d.get_current_card());
-            setPreviousCard(d.get_previous_card());
+            setDeck(d.get_cards_in_pile()); //current state of deck
+            setCurrentCard(d.get_current_card()); //set current card state
+            setPreviousCard(d.get_previous_card()); //set previous card state
             setAllPrevious((prevAllPrevious) => [...prevAllPrevious, previous_card]);
-            setGameOver(deck.length === 0);
+            setGameOver(d.get_cards_in_pile().length === 0); //try not to make state dependent on another state
+            console.log("ended handle guess");
         }
     }
 
@@ -124,6 +130,7 @@ const Start = () => {
         setFlag("Show");
         setGameOver(false);
         setStore(false);
+        localStorage.setItem("store", JSON.stringify(false));
     }
 
     //Start function renders this html content
