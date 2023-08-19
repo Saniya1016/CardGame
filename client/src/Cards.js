@@ -1,5 +1,6 @@
-
+//Cards class simply implements the logic of the game
 class Cards{
+    //set original state
     constructor(){
         this.cards = [];
         this.current_card = {};
@@ -15,6 +16,7 @@ class Cards{
         }   
     }
 
+    //reset back to original to restart the game
     reset_state = () => {
         this.cards = [];
         this.current_card = {};
@@ -31,18 +33,24 @@ class Cards{
         this.shuffle(); 
     }
 
+    //get the current deck state
     get_cards_in_pile = () =>{
         return [...this.cards]; //shallow copy of array
     }
 
+
+    //return the current card we drew
     get_current_card = () => {
         return this.current_card;
     }
 
+    //return the previous card we drew
     get_previous_card = () => {
         return this.previous_card;
     }
 
+
+    //shuffle all cards before begining the game
     shuffle = () => {
         const n = this.cards.length;
         for (let i = n - 1; i >= 1; i--) {
@@ -52,10 +60,12 @@ class Cards{
         this.current_card = this.cards.pop();
     }
 
+    //set the players current choice
     choose_high_low = (choice) => {
         this.high = (choice === "high")? true : false;
     }
 
+    //determine wheteher the players current chhoice was a success or not
     draw_from_pile_is_success = () => {
         if(this.cards.length > 0){
             console.log("drawing from pile");
@@ -71,9 +81,17 @@ class Cards{
 
 };
 
+//we want to alwyas export the Cards object after shuffling
 let d = new Cards();
 d.shuffle();
 export default d;
+
+
+
+
+
+
+
 
 // ----------- TESTS ------------ //
 

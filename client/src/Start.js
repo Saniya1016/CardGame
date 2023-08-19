@@ -1,49 +1,62 @@
+//Notes: useState re-renders on refreshing page/ mounting and unmounting page
+//       using local storage for browser persistance
+//       we cannot directly call async functions in useEffect since useEffect is supposed to be synchronous with the changes to variables
+
 import React, {useState, useEffect} from "react";
 import d from './Cards';
 import Card from './Card';
 import * as crud from './crud.js';
 
 
+const Start = () => {
+
+    const user_id = localStorage.getItem("username");  //get username from local storage (set on previous page)
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem("user_info")) || {});  //read current user from database
+    const [deck, setDeck] = useState(JSON.parse(localStorage.getItem("deck")) || d.get_cards_in_pile());  //store the current state of the cards deck
+    const [current_card, setCurrentCard] = useState(JSON.parse(localStorage.getItem("current_card")) || d.get_current_card()); //get the card object we just drew
+    const [previous_card, setPreviousCard] = useState(JSON.parse(localStorage.getItem("previous_card")) || d.get_previous_card()); // get the previous card that was drawn
+    const [allPrevious, setAllPrevious] = useState( JSON.parse(localStorage.getItem("allPrevious")) || []); // see all the previous cards we drew
+    const [showAllPrevious, setShowAllPrevious] = useState(JSON.parse(localStorage.getItem("showAllPrevious"))||false); // boolean to toggle b/w show and hide
+    const [flag, setFlag] = useState(localStorage.getItem("flag") || "Show"); // toggle bw the display of show / hide button
+    const [score, setScore] = useState(JSON.parse(localStorage.getItem("score"))|| 0); //current score
+    const [gameOver, setGameOver] = useState(JSON.parse(localStorage.getItem("gameOver")) || false); //check if game is over i.e deck has no cards remaining
+    const [store, setStore] = useState(JSON.parse(localStorage.getItem("store")) || false); // store flag to check if we have already stored the score once the game is over
 
 
-const Start = () =>{
-
-    const user_id = localStorage.getItem("username");
-    const [user, setUser] = useState({});
-    //useState re-renders on refreshing page/ mounting and unmounting page
-    const [deck, setDeck] = useState(JSON.parse(localStorage.getItem("deck")) || d.get_cards_in_pile());
-    const [current_card, setCurrentCard] = useState(JSON.parse(localStorage.getItem("current_card")) || d.get_current_card());
-    const [previous_card, setPreviousCard] = useState(JSON.parse(localStorage.getItem("previous_card")) || d.get_previous_card());
-    const [allPrevious, setAllPrevious] = useState( JSON.parse(localStorage.getItem("allPrevious")) || []);
-    const [showAllPrevious, setShowAllPrevious] = useState(JSON.parse(localStorage.getItem("showAllPrevious"))||false);
-    const [flag, setFlag] = useState(localStorage.getItem("flag") || "Show");
-    const [score, setScore] = useState(JSON.parse(localStorage.getItem("score"))|| 0);
-
-
+    //to set current user info in local storage when we set username
     useEffect(() => {
         // Fetch user data and update the component state
         const fetchUserData = async () => {
             const usr = await crud.readUser(user_id);
-            console.log("hiii", usr); 
+            localStorage.setItem("user_info", JSON.stringify(usr));
             setUser(usr);
+            
         };
     
         // Call the function to fetch user data when the component mounts
         fetchUserData();
       }, [user_id]);
 
+
+    //update the users score in the database only once when the game is over
     useEffect(()  => {
+        //store in db
         const setScore = async () =>{
-            if(deck.length === 0){
-                const response = await crud.updateScore(user.id, [...user.score, score]);
-                console.log(response);
+            console.log("weird: ", deck.length ===0, gameOver, user, store);
+            if(deck.length === 0 && gameOver && user && user.score && !store){
+                user.score[0] = Math.max(user.score[0], score);
+                const response = await crud.updateScore(user._id, user.score);
+                setStore(true);
+                localStorage.setItem("store", JSON.stringify(true))
+                console.log("idkkk: ", response);
             }
         }
         setScore();
-    }, [deck, score, user]);
+
+    }, [deck.length, score, user, gameOver, store]);
 
 
-    //set item in local storage whenever state changes
+    //set item in local storage whenever state changes - this way we dont have to keep setting localStorage everytime we make a change
     useEffect(() => {
         localStorage.setItem("deck", JSON.stringify(deck) );
         localStorage.setItem("current_card", JSON.stringify(current_card));
@@ -52,22 +65,30 @@ const Start = () =>{
         localStorage.setItem("showAllPrevious", JSON.stringify(showAllPrevious));
         localStorage.setItem("score", score);
         localStorage.setItem("flag", flag);
+        localStorage.setItem("gameOver", JSON.stringify(deck.length === 0));
 
-    }, [current_card, deck, allPrevious, showAllPrevious, previous_card, score, flag]);
+    }, [current_card, deck, allPrevious, showAllPrevious, previous_card, score, flag, gameOver]);
 
+    //handle the players next move /guess 
     const handleGuess = (guess) => {
-        d.choose_high_low(guess);
-        if(d.draw_from_pile_is_success()){
-            setScore(score+1);
-        } else{
-            setScore(score-1);
+        //if game is not over
+        if(!gameOver){
+            //set the users choice and determine wheteher it is a success
+            d.choose_high_low(guess);
+            if(d.draw_from_pile_is_success()){
+                setScore(score+1); //+1 for success
+            } else{
+                setScore(score-1); //-1 for failure
+            }
+            setDeck(d.get_cards_in_pile());
+            setCurrentCard(d.get_current_card());
+            setPreviousCard(d.get_previous_card());
+            setAllPrevious((prevAllPrevious) => [...prevAllPrevious, previous_card]);
+            setGameOver(deck.length === 0);
         }
-        setDeck(d.get_cards_in_pile());
-        setCurrentCard(d.get_current_card());
-        setPreviousCard(d.get_previous_card());
-        setAllPrevious((prevAllPrevious) => [...prevAllPrevious, previous_card]);
     }
 
+    //make an array of the CSS card objects to render the previous cards
     const seeAllPreviousCards = () =>{
         const arrayItems = allPrevious.map((card, index)=>
             <Card key={index} rank={card.number} suit={card.suit}/>
@@ -81,6 +102,7 @@ const Start = () =>{
         );
     }
 
+    //switch between show and hide button
     const toggleAllPrevious = () => {
         if(flag === "Show"){
             setFlag("Hide");
@@ -90,6 +112,7 @@ const Start = () =>{
         setShowAllPrevious(!showAllPrevious);
     }
 
+    //when the player resets the game - all the states are changed back to original state
     const handleRestart = () =>{
         d.reset_state();
         setDeck(d.get_cards_in_pile());
@@ -99,9 +122,11 @@ const Start = () =>{
         setAllPrevious([]);
         setShowAllPrevious(false);
         setFlag("Show");
+        setGameOver(false);
+        setStore(false);
     }
 
-
+    //Start function renders this html content
     return (
         <div>
             <h1>Will The Next Card Be High OR LOW ?</h1>
