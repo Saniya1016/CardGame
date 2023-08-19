@@ -1,4 +1,4 @@
-// ======= USER CRUD ================== //
+// =========== USER CRUD ================== //
 
 export async function createUser(id){
     const response = await fetch(`http://localhost:8080/saveUser`, {
@@ -16,7 +16,6 @@ export async function readUser(id){
     const response = await fetch(`http://localhost:8080/getUser?id=${id}`, {
         method: 'GET',
     });
-    console.log("wtf", response);
     if(!response) {throw new Error('Error');}
     const data = await response.json();
     console.log("data = ", data);
@@ -29,9 +28,9 @@ export async function updateScore(id, score){
         headers: {
             "Content-Type":'application/json',
         },
-        body: JSON.stringify({id: id, score : score}),
+        body: JSON.stringify({id: id, score: score}),
     });
-    console.log("res: ", response);
+    console.log("res***: ", response);
     return response.ok;
 }
 
@@ -41,6 +40,6 @@ export async function deleteUser(id){
         headers: {"Content-Type":'application/json',},
         body: JSON.stringify({id: id }),
     });
-    console.log("response: ", response);
+    console.log("response***: ", response);
     return response.ok;
 }

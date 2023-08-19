@@ -50,11 +50,13 @@ app.post("/saveUser", async(req, res) => {
 
 //update user score given id and new score
 app.put("/updateScore", async(req, res) => {
+    console.log(req.body);
     if(req.body !== undefined && req.body.id !== undefined && req.body.score !== undefined){
         const response = await score_data.updateUser(req.body.id, req.body.score);
         console.log(response);
         res.status(200).send('OK');
     } else{
+        console.log("brun what");
         res.status(400).json({'error': 'missing parameters'});
     }
 });
