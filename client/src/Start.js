@@ -22,6 +22,14 @@ const Start = () => {
     const [gameOver, setGameOver] = useState(JSON.parse(localStorage.getItem("gameOver")) || false); //check if game is over i.e deck has no cards remaining
     const [store, setStore] = useState(JSON.parse(localStorage.getItem("store")) || false); // store flag to check if we have already stored the score once the game is over
 
+    //on mount we check if this is the first time we are entering the game froom landing => if so we restart
+    useEffect(() => {
+        const f = JSON.parse(localStorage.getItem("mount"));
+        if(f){
+            handleRestart();
+            localStorage.setItem("mount", JSON.stringify(false));
+        }
+    }, []);
 
     //to set current user info in local storage when we set username
     useEffect(() => {
@@ -85,6 +93,7 @@ const Start = () => {
             } else{
                 setScore(score-1); //-1 for failure
             }
+            
             setDeck(d.get_cards_in_pile()); //current state of deck
             setCurrentCard(d.get_current_card()); //set current card state
             setPreviousCard(d.get_previous_card()); //set previous card state

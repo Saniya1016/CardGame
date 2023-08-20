@@ -19,6 +19,7 @@ export const Landing = () => {
     //whenever name is being changed store the updated name to localStorage
     useEffect(() => {
         localStorage.setItem("username", name);
+        localStorage.setItem("mount", JSON.stringify(true));
         console.log(localStorage.getItem("username"));
     }, [name]);
 
